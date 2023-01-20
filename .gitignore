@@ -1,0 +1,11 @@
+garbage/
+splits/
+heatmaps/
+eval_results/
+logs/
+*.csv
+*.ipynb_checkpoints/
+.idea/
+**/__pycache__/
+*.pt
+Results/
