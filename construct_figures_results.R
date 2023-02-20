@@ -37,7 +37,7 @@ my_pairs = list(c(c('percentage_cluster0', 'Response'),
                 c(c('percentage_cluster7', 'Response'),
                   c('percentage_cluster7', 'Non-response')))
 
-data_box_plots = read.csv("./Results/clustering/percentage_clusters_cohort_1.csv")
+data_box_plots = read.csv("./Results/clustering/percentage_clusters_cohort_1_confirmed.csv")
 data_box_plots$Objective.Response <- mapvalues(data_box_plots$Objective.Response,
                                                from=c("Negative Response","Positive Response"),
                                                to=c("Non-response","Response"))
@@ -158,7 +158,7 @@ my_pairs = list(c(c('percentage_cluster0', 'Response'),
                 c(c('percentage_cluster7', 'Response'),
                   c('percentage_cluster7', 'Non-response')))
                   
-data_box_plots = read.csv("./Results/clustering/percentage_clusters_cohort_2.csv")
+data_box_plots = read.csv("./Results/clustering/percentage_clusters_cohort_2_confirmed.csv")
 data_box_plots$Objective.Response <- mapvalues(data_box_plots$Objective.Response,
                                                from=c("Negative Response","Positive Response"),
                                                to=c("Non-response","Response"))
@@ -177,7 +177,7 @@ stat.test <- stat.test %>%
 
 box_plot + stat_pvalue_manual(stat.test, label="p = {p.adj}", tip.length = 0.01) + scale_x_discrete(labels = c("0", "1", "2", "3", "4", "5", "6", "7")) + scale_y_continuous(labels = scales::percent, breaks=c(0,.2,.4,.6,.8)) 
 
-data_box_plots = read.csv("../Daisy-code/Results_cohort2_pretrained_cohort1/percentage_clusters.csv")
+data_box_plots = read.csv("./Results/clustering/percentage_clusters_cohort_2_pretrained_confirmed.csv")
 data_box_plots$Objective.Response <- mapvalues(data_box_plots$Objective.Response,
                                                from=c("Negative Response","Positive Response"),
                                                to=c("Non-response","Response"))

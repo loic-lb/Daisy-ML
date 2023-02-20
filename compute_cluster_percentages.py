@@ -11,7 +11,7 @@ from preprocessing import construct_dataset
 def main():
     parser = argparse.ArgumentParser(description="Train clustering algorithm and retrieves cluster's percentage")
     parser.add_argument("--features_matrix", type=str, default="./Results/clustering/features_matrix.pickle",
-                    help="Path to features matrix pickle file extracted from the slides")
+                        help="Path to features matrix pickle file extracted from the slides")
     parser.add_argument("--dataset_path", type=str, default="./dataset.csv", help="Clinical data file path")
     parser.add_argument("--save_location", type=str, default="./Results/clustering/", help="Where to save result")
     parser.add_argument("--cohort_indices", type=int, nargs='+', default=[1], help="Cohorts to include in the analysis")
@@ -30,8 +30,10 @@ def main():
         kmeans = clusterize(M, args.nb_clusters, True)
     features = []
     df, dataset = construct_dataset(args.dataset_path)
-    patient_list = df[df.cohort.isin([f"COHORT {i}" for i in args.cohort_indices])].case_id.unique()
-    objective_response_list = df[df.cohort.isin([f"COHORT {i}" for i in args.cohort_indices])].label
+    patient_list = df[df.cohort.isin([f"COHORT {i}" for i in args.cohort_indices]) &
+                      (df.confirmation != "unconfirmed")].case_id.unique()
+    objective_response_list = df[df.cohort.isin([f"COHORT {i}" for i in args.cohort_indices]) &
+                                 (df.confirmation != "unconfirmed")].label.values
     for patient_id in tqdm(patient_list):
         df_patient = df[df.case_id == patient_id]
         features.append(get_percentage(df_patient, dataset, kmeans, (features_matrix_dict["mean"],
@@ -43,17 +45,17 @@ def main():
          "Objective Response": np.repeat(objective_response_list, features.shape[1])})
     result["Objective Response"] = result["Objective Response"].map(
         {"YES": 'Positive Response', "NO": 'Negative Response'})
-    
+
     file_name = "percentage_clusters_cohort"
     for i in args.cohort_indices: file_name += f"_{i}"
     if args.pretrained_kmeans:
         file_name += "_pretrained"
-    result.to_csv(os.path.join(args.save_location, file_name + ".csv"), index=False)
-    
+    result.to_csv(os.path.join(args.save_location, file_name + "_confirmed.csv"), index=False)
+
     if not args.pretrained_kmeans:
         file_name = "kmeans_model_cohort"
         for i in args.cohort_indices: file_name += f"_{i}"
-        with open(os.path.join(args.save_location, file_name + ".pickle"), "wb") as fp:
+        with open(os.path.join(args.save_location, file_name + "_confirmed.pickle"), "wb") as fp:
             pickle.dump(kmeans, fp)
 
 
