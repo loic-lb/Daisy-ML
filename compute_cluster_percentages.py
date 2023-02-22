@@ -18,7 +18,7 @@ def main():
     parser.add_argument("--nb_clusters", type=int, default=8, help="Number of cluster to segment (ideally chosen "
                                                                    "according to "
                                                                    "optimal_number_clusters.py results)")
-    parser.add_argument("--pretrained_kmeans", type=str, help="Path to pretrained K-Means model")
+    parser.add_argument("--pretrained_kmeans", type=str, default=None, help="Path to pretrained K-Means model")
     args = parser.parse_args()
     with open(args.features_matrix, "rb") as input_file:
         features_matrix_dict = pickle.load(input_file)
@@ -55,7 +55,7 @@ def main():
     if not args.pretrained_kmeans:
         file_name = "kmeans_model_cohort"
         for i in args.cohort_indices: file_name += f"_{i}"
-        with open(os.path.join(args.save_location, file_name + "_confirmed.pickle"), "wb") as fp:
+        with open(os.path.join(args.save_location, file_name + ".pickle"), "wb") as fp:
             pickle.dump(kmeans, fp)
 
 

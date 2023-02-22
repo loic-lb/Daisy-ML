@@ -46,7 +46,7 @@ def main():
         feats = (feats - features_matrix_dict["mean"]) / features_matrix_dict["std"]
         labels_clustering = kmeans.predict(feats)
 
-        raw_data = pd.read_csv(os.path.join(args.nuclei_annotations, f"{slide_name}.csv"), sep="\t")
+        raw_data = pd.read_csv(os.path.join(args.annotation_measurements, f"{slide_name}.csv"), sep="\t")
         # Filter some noise by minimum perimeter and minimum circularity
         raw_data = raw_data.drop((raw_data[(raw_data["Perimeter µm"] < 8.29) & (raw_data["Circularity"] < 0.31)]).index)
         # Remove useless columns and nan lines

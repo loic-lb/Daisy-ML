@@ -7,13 +7,13 @@ from the DAISY clinical trial.
 
 ## Installation
 
-To reproduce the analyses, please first start by indicating the correct paths in ```./clustering_analysis/imports.py``` for:
+To reproduce the analyses, please first start by indicating the correct paths in ```./preprocessing/imports.py``` for:
 * ```SLIDE_PATH``` pointing towards raw whole slide images save location.
 * ```ROIS_PATH``` pointing towards a csv file with ROI coordinates of areas to analyse in the slides. 
 * ```PATHOLOGIST_ANNOTATIONS_PATH``` pointing towards pathologist's annotations.
 
 You also need the following csv files (considered to be located by default at the root of the code):
-* ```dataset.csv``` describing case ids, slide ids, cohort index and objective response to treatment.
+* ```dataset.csv``` describing case ids, slide ids, cohort index, objective response to treatment and confirmation of objective response.
 * ```correction_groups.csv``` describing the group attributed to each slide depending on the intensity of correction needed (only necessary for nuclei segmentation analysis).
 
 See data access part for requiring access to these elements.
@@ -50,7 +50,7 @@ Before performing clustering analysis, the extracted features must be concatenat
 ```
 python ./compute_features_matrix.py --cohort_indices i 
 ```
-with i the index of the cohort to analyse.
+with i the index of the cohort to analyze.
 
 Finally, the percentage of each cluster for each slide after training a Mini-Batch KMeans model on this feature matrix are retrieved using
 ```./compute_cluster_percentages.py``` with the following command line:
@@ -58,14 +58,13 @@ Finally, the percentage of each cluster for each slide after training a Mini-Bat
 ```
 python ./compute_cluster_percentages.py --features_matrix ./Results/clustering/features_matrix_cohort_i.pickle --cohort_indices i
 ```
-with i the index of the cohort to analyse.
+with i the index of the cohort to analyze.
 
 Optionally, the optimal number of clusters can be computed using ```./optimal_number_clusters```.
 Several options are available to change the range of clusters to consider or score to use.
 
 To reproduce the figures, please use the R script ```./construct_figures_results.R```, and the jupyter file ```visualize.ipynb```.
 
-For convenience, we have provided the resulting csv files of ```compute_cluster_percentages.py``` and ```optimal_number_clusters.py```. 
 Please feel free to contact us to get access to slide files, pathologist's annotations, and ROIs and dataset csv files.
 
 ## Nuclei segmentation analysis
@@ -79,7 +78,7 @@ python ./script_extract_nuclei.py
 You then need to import these annotations into QuPath and use the provided scripts in  to extract nuclei features.
 
 
-Lastly, the features are averaged accross each patch used for clustering and compiled into a single csv file with clustering assignement. To reproduce the analysis, please use the following command line:
+Lastly, the features are averaged across each patch used for clustering and compiled into a single csv file with clustering assignement. To reproduce the analysis, please use the following command line:
 
 ```
 python ./script_compile_annotation_measurements.py --features_matrix ./Results/clustering/features_matrix_cohort_1.pickle --pretrained_kmeans ./Results/clustering/kmeans_model_cohort_1.pickle --cohort_indices 1

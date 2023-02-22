@@ -9,6 +9,13 @@ from skimage.util.dtype import dtype_limits
 
 
 def import_model(model_path, device, norm="instance"):
+    """
+
+    :param model_path: path to the unsupervised nuclei segmentation model checkpoint
+    :param device: device to run the model on
+    :param norm: normalization to use in the model
+    :return: the pretrained unsupervised nuclei segmentation model
+    """
     model = Generator(norm=norm, use_dropout=False).to(device)
     model.eval()
     checkpoint = torch.load(model_path)
@@ -17,6 +24,12 @@ def import_model(model_path, device, norm="instance"):
 
 
 def get_patch_idx_inside_roi(coords, bbox):
+    """
+
+    :param coords: coordinates of the patches
+    :param bbox: bounding box of the ROI
+    :return: indices of the patches inside the ROI
+    """
     valid_idx = []
     l, t, r, b = bbox
     for idx in range(len(coords)):
@@ -27,6 +40,13 @@ def get_patch_idx_inside_roi(coords, bbox):
 
 
 def extract_nuclei(mask_nuclei, xminp, yminp):
+    """
+
+    :param mask_nuclei: mask of the nuclei segmentation
+    :param xminp: x coordinate of the top left corner of the slide
+    :param yminp: y coordinate of the top left corner of the slide
+    :return: list of nuclei coordinates and contours in json format
+    """
     coord, mask = mask_nuclei
     watershed_mask = compute_watershed(compute_morphological_operations(mask, erosion=False))
     nuclei = []
@@ -49,6 +69,7 @@ def extract_nuclei(mask_nuclei, xminp, yminp):
 
 def is_low_contrast(image, fraction_threshold=0.05, lower_percentile=1,
                     upper_percentile=99):
+    """Check if the image is low contrast. (see skimage.exposure.is_low_contrast documentation)"""
     image = np.asanyarray(image)
 
     if image.dtype == bool:

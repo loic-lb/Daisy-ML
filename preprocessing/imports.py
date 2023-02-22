@@ -1,7 +1,7 @@
 ATTENTION_WEIGHTS_PATH = "/"  # not used here
-SLIDES_PATH = "/path/to/wholeslideimages/"
-ROIS_PATH = "/path/to/roisdf"
-PATHOLOGIST_ANNOTATIONS_PATH = "/path/to/annotations"
+SLIDES_PATH = "/path/to/data/"
+ROIS_PATH = "/path/to/tissue_ROIs"
+PATHOLOGIST_ANNOTATIONS_PATH = "/path/to/annotations_pathologist"
 PATCHES_CLUSTERING_PATH = "./Results/clustering/"
 PATCHES_NUCLEI_PATH = "./Results/nuclei/"
 

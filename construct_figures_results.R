@@ -59,6 +59,36 @@ box_plot + stat_pvalue_manual(stat.test, label="p = {p.adj}", tip.length = 0.01)
   theme(axis.text=element_text(size=10), axis.title=element_text(size=12))
 #box_plot + stat_compare_means(aes(group=Objective.Response), label = "p.format") + scale_x_discrete(labels = c("Percentage cluster 0", "Percentage cluster 1", "Percentage cluster 2", "Percentage cluster 3", "Percentage cluster 4", "Percentage cluster 5", "Percentage cluster 6", "Percentage cluster 7")) 
 
+## Cell caracterization cluster 6
+
+cell_caract <-read.csv("./Results/clustering/cell_caracterization_cluster6.csv", sep=";")
+cell_caract_na <- subset(na.omit(cell_caract))
+summary_df <- data.frame(Celularity=as.integer(as.vector(cell_caract_na$cellularity)))
+summary_df[['Percentage of tumoral cells']] <- cell_caract_na$tumoral_cells_IHC0+cell_caract_na$tumoral_cells_IHC1+cell_caract_na$tumoral_cells_IHC2
+summary_df[['Percentage of tumoral cells 0+']] <- as.integer(cell_caract_na$tumoral_cells_IHC0)
+summary_df[['Percentage of tumoral cells 1+']] <- as.integer(cell_caract_na$tumoral_cells_IHC1)
+summary_df[['Percentage of tumoral cells 2+']] <- as.numeric(cell_caract_na$tumoral_cells_IHC2)
+summary_df[['Percentage of immune cells']] <- cell_caract_na$immune_cells
+summary_df[['Percentage of fibroblast cells']] <- cell_caract_na$fibroblasts
+summary_df[['Percentage of other cells']] <- cell_caract_na$other_cells
+summary_df %>% tbl_summary(type = list("Percentage of tumoral cells 0+"	 ~ "continuous", "Percentage of tumoral cells 2+"	 ~ "continuous"))
+
+summary_df = summary_df %>% tbl_summary(statistic =list(all_continuous() ~ "{mean} ({sd})"), 
+                             type = list("Percentage of tumoral cells 0+"	 ~ "continuous", 
+                                         "Percentage of tumoral cells 2+"	 ~ "continuous"), digits=everything() ~ 2) 
+add_ci(summary_df)
+
+caract_tum_cells <- subset(cell_caract, (tumoral_cells_IHC0!=0)|(tumoral_cells_IHC1!=0)|(tumoral_cells_IHC2!=0))
+summary_df <- data.frame(a = (caract_tum_cells$tumoral_cells_IHC0 / (caract_tum_cells$tumoral_cells_IHC0+caract_tum_cells$tumoral_cells_IHC1+caract_tum_cells$tumoral_cells_IHC2))*100)
+colnames(summary_df) <- c("Proportion of tumoral cells 0+ among all tumoral cells")
+summary_df[["Proportion of tumoral cells 1+ among all tumoral cells"]] = (caract_tum_cells$tumoral_cells_IHC1 / (caract_tum_cells$tumoral_cells_IHC0+caract_tum_cells$tumoral_cells_IHC1+caract_tum_cells$tumoral_cells_IHC2))*100
+summary_df[["Proportion of tumoral cells 2+ among all tumoral cells"]] = (caract_tum_cells$tumoral_cells_IHC2 / (caract_tum_cells$tumoral_cells_IHC0+caract_tum_cells$tumoral_cells_IHC1+caract_tum_cells$tumoral_cells_IHC2))*100
+summary_df %>% tbl_summary(type=list("Proportion of tumoral cells 2+ among all tumoral cells" ~ "continuous"))
+
+summary_df = summary_df %>% tbl_summary(statistic =list(all_continuous() ~ "{mean} ({sd})"), 
+                             type =list("Proportion of tumoral cells 2+ among all tumoral cells" ~ "continuous"), digits=everything() ~ 3)
+add_ci(summary_df)
+
 ## Percentage on pipeline figure
 
 coul = rev(c("#E41A1C", "#377EB8",  "#4DAF4A", "#984EA3", "#FFFF33", "#A65628", "#F781BF", "#999999"))
@@ -123,6 +153,7 @@ ggplot(data = tb[!tb$proportion == 0, ], aes(x = factor(clu, level=c(4,0,2,1,5,7
                                                                       y="Proportion of patches (%)",
                                                                       fill="Number of nuclei by patch",
                            ) + scale_y_continuous(labels = scales::percent_format()) + theme(axis.text=element_text(size=10), axis.title=element_text(size=12))
+
 
 
 # COHORT 2 analysis
