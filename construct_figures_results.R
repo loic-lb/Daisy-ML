@@ -59,9 +59,9 @@ box_plot + stat_pvalue_manual(stat.test, label="p = {p.adj}", tip.length = 0.01)
   theme(axis.text=element_text(size=10), axis.title=element_text(size=12))
 #box_plot + stat_compare_means(aes(group=Objective.Response), label = "p.format") + scale_x_discrete(labels = c("Percentage cluster 0", "Percentage cluster 1", "Percentage cluster 2", "Percentage cluster 3", "Percentage cluster 4", "Percentage cluster 5", "Percentage cluster 6", "Percentage cluster 7")) 
 
-## Cell caracterization cluster 6
+## Cell characterization cluster 6
 
-cell_caract <-read.csv("./Results/clustering/cell_caracterization_cluster6.csv", sep=";")
+cell_caract <-read.csv("./Results/clustering/cell_characterization_cluster6.csv", sep=";")
 cell_caract_na <- subset(na.omit(cell_caract))
 summary_df <- data.frame(Celularity=as.integer(as.vector(cell_caract_na$cellularity)))
 summary_df[['Percentage of tumoral cells']] <- cell_caract_na$tumoral_cells_IHC0+cell_caract_na$tumoral_cells_IHC1+cell_caract_na$tumoral_cells_IHC2
