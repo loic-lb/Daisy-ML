@@ -30,10 +30,8 @@ def main():
         kmeans = clusterize(M, args.nb_clusters, True)
     features = []
     df, dataset = construct_dataset(args.dataset_path)
-    patient_list = df[df.cohort.isin([f"COHORT {i}" for i in args.cohort_indices]) &
-                      (df.confirmation != "unconfirmed")].case_id.unique()
-    objective_response_list = df[df.cohort.isin([f"COHORT {i}" for i in args.cohort_indices]) &
-                                 (df.confirmation != "unconfirmed")].label.values
+    patient_list = df[df.cohort.isin([f"COHORT {i}" for i in args.cohort_indices])].case_id.unique()
+    objective_response_list = df[df.cohort.isin([f"COHORT {i}" for i in args.cohort_indices])].label.values
     for patient_id in tqdm(patient_list):
         df_patient = df[df.case_id == patient_id]
         features.append(get_percentage(df_patient, dataset, kmeans, (features_matrix_dict["mean"],
@@ -50,7 +48,7 @@ def main():
     for i in args.cohort_indices: file_name += f"_{i}"
     if args.pretrained_kmeans:
         file_name += "_pretrained"
-    result.to_csv(os.path.join(args.save_location, file_name + "_confirmed.csv"), index=False)
+    result.to_csv(os.path.join(args.save_location, file_name + ".csv"), index=False)
 
     if not args.pretrained_kmeans:
         file_name = "kmeans_model_cohort"
