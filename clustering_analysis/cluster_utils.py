@@ -102,7 +102,7 @@ def get_attention_filtered_resnet_feats(dataset, slide_idx, indices):
     return np.array(dataset[slide_idx][0])[indices]
 
 
-def construct_feats(df, slide_name, dataset, ponderate=False, attention_thresh=None):
+def construct_feats(df, slide_name, dataset, ponderate=None, attention_thresh=None):
     """
 
     :param df: dataframe with slide indices and IHC values
